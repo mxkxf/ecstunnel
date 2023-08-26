@@ -4,7 +4,7 @@ import json
 import subprocess
 
 parser = argparse.ArgumentParser(
-                    prog='ecs-tunnel',
+                    prog='ecst',
                     description='Create local tunnels and sessions to AWS ECS services running in a VPC',)
 parser.add_argument('cluster',
                     help='The name of the ECS cluster')

@@ -19,6 +19,6 @@ pip install ecst
 
 ```bash
 usage: python -m ecst [-h] [--local-port LOCAL_PORT] [--remote-port REMOTE_PORT]
-                  [--region REGION] [--aws-profile AWS_PROFILE]
-                  cluster service
+            [--region REGION] [--aws-profile AWS_PROFILE] [--verbose]
+            cluster service
 ```
