@@ -1,7 +1,5 @@
 # ecst 
 
-🚧 WIP 🚧
-
 Create local tunnels and sessions to AWS ECS services running in a VPC.
 
 ## Prerequesites
