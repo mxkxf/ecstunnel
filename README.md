@@ -4,6 +4,7 @@ Create local tunnels and sessions to AWS ECS services running in a VPC.
 
 ## Prerequesites
 
+* Python 3 (3.11 seems to work quite well)
 * macOS (sorry)
 * [AWS CLI Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
 
