@@ -26,13 +26,13 @@ services_response = ecsClient.list_services(
 )
 
 if args.verbose:
-  print('services_response')
+  print('---services_response---')
   print(services_response)
 
 service_arn = [k for k in services_response['serviceArns'] if args.service in k][0]
 
 if args.verbose:
-  print('service_arn')
+  print('---service_arn---')
   print(service_arn)
 
 list_tasks_response = ecsClient.list_tasks(
@@ -41,11 +41,17 @@ list_tasks_response = ecsClient.list_tasks(
 )
 
 if args.verbose:
-  print('list_tasks_response')
+  print('---list_tasks_response---')
   print(list_tasks_response)
 
 task_arn = list_tasks_response['taskArns'][0]
 task_id = task_arn.split('/')[-1]
+
+if args.verbose:
+  print('---task_arn---')
+  print(task_arn)
+  print('---task_id---')
+  print(task_id)
 
 tasks_response = ecsClient.describe_tasks(
   cluster=args.cluster,
@@ -53,10 +59,20 @@ tasks_response = ecsClient.describe_tasks(
 )
 
 if args.verbose:
-  print('tasks_response')
+  print('---tasks_response---')
   print(tasks_response)
 
-container_id = tasks_response['tasks'][0]['containers'][0]['runtimeId']
+container_id = None
+containers = tasks_response['tasks'][0]['containers']
+
+# Loop through containers to find one with the same name as the service
+# (There is sometimes a `ecs-service-connect` container so cannot rely on there being 1 container, or 1st container)
+for container in containers:
+  if container['name'] == args.service:
+    container_id = container['runtimeId']
+
+if container_id is None:
+  raise Exception(f"Cannot find a container runtimeId for %s" % args.service)
 
 target=f"ecs:%s_%s_%s" % (args.cluster, task_id, container_id)
 
