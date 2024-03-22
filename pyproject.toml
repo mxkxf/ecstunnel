@@ -1,6 +1,6 @@
 [project]
 name = "ecst"
-version = "0.0.7"
+version = "0.0.8"
 authors = [{ name = "Mike Francis", email = "mikeffrancis@gmail.com" }]
 description = "Create local tunnels and sessions to AWS ECS services running in a VPC."
 readme = "README.md"
@@ -14,7 +14,6 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/mikefrancis/ecstunnel"
 "Bug Tracker" = "https://github.com/mikefrancis/ecstunnel/issues"
-
 
 [build-system]
 requires = ["hatchling"]

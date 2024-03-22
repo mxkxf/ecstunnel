@@ -2,6 +2,13 @@ import argparse
 import boto3
 import json
 import subprocess
+import signal
+
+def handler(signum, frame):
+    print('\nExiting...')
+    exit (0)
+
+signal.signal(signal.SIGINT, handler)
 
 parser = argparse.ArgumentParser(
                     prog='ecst',
@@ -97,6 +104,6 @@ cmd = [
     args.aws_profile,
     json.dumps(dict(Target=target)),
     f'https://ssm.%s.amazonaws.com' % (args.region)
-
 ]
+
 subprocess.run(cmd)
