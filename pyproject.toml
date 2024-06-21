@@ -1,6 +1,6 @@
 [project]
 name = "ecst"
-version = "0.0.8"
+version = "0.0.9"
 authors = [{ name = "Mike Francis", email = "mikeffrancis@gmail.com" }]
 description = "Create local tunnels and sessions to AWS ECS services running in a VPC."
 readme = "README.md"
@@ -10,6 +10,7 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
 ]
+dependencies = ["boto3"]
 
 [project.urls]
 "Homepage" = "https://github.com/mikefrancis/ecstunnel"
