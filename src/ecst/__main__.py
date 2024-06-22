@@ -33,14 +33,12 @@ services_response = ecsClient.list_services(
 )
 
 if args.verbose:
-  print('---services_response---')
-  print(services_response)
+  print('services:', services_response)
 
 service_arn = [k for k in services_response['serviceArns'] if args.service in k][0]
 
 if args.verbose:
-  print('---service_arn---')
-  print(service_arn)
+  print('service_arn:', service_arn)
 
 list_tasks_response = ecsClient.list_tasks(
   cluster=args.cluster,
@@ -48,17 +46,14 @@ list_tasks_response = ecsClient.list_tasks(
 )
 
 if args.verbose:
-  print('---list_tasks_response---')
-  print(list_tasks_response)
+  print('tasks:', list_tasks_response)
 
 task_arn = list_tasks_response['taskArns'][0]
 task_id = task_arn.split('/')[-1]
 
 if args.verbose:
-  print('---task_arn---')
-  print(task_arn)
-  print('---task_id---')
-  print(task_id)
+  print('task_arn:', task_arn)
+  print('task_id:', task_id)
 
 tasks_response = ecsClient.describe_tasks(
   cluster=args.cluster,
@@ -66,8 +61,7 @@ tasks_response = ecsClient.describe_tasks(
 )
 
 if args.verbose:
-  print('---tasks_response---')
-  print(tasks_response)
+  print('tasks:', tasks_response)
 
 container_id = None
 containers = tasks_response['tasks'][0]['containers']
@@ -80,6 +74,9 @@ for container in containers:
 
 if container_id is None:
   raise Exception(f"Cannot find a container runtimeId for %s" % args.service)
+
+if args.verbose:
+  print('container_id:', container_id)
 
 target=f"ecs:%s_%s_%s" % (args.cluster, task_id, container_id)
 
@@ -95,6 +92,9 @@ ssm_response = ssmClient.start_session(
     ],
   }
 )
+
+if args.verbose:
+  print('ssm_response:', ssm_response)
 
 cmd = [
     '/usr/local/sessionmanagerplugin/bin/session-manager-plugin',
