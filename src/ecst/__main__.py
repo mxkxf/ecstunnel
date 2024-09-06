@@ -25,8 +25,14 @@ parser.add_argument('--verbose', action='store_true')
 
 args = parser.parse_args()
 
-ecsClient = boto3.client('ecs')
-ssmClient = boto3.client('ssm')
+if (args.verbose):
+  print('---')
+  print('args:', args)
+  print('---')
+
+session = boto3.Session(profile_name=args.aws_profile, region_name=args.region)
+ecsClient = session.client('ecs')
+ssmClient = session.client('ssm')
 
 services_response = ecsClient.list_services(
   cluster=args.cluster
@@ -53,7 +59,6 @@ task_id = task_arn.split('/')[-1]
 
 if args.verbose:
   print('task_arn:', task_arn)
-  print('task_id:', task_id)
 
 tasks_response = ecsClient.describe_tasks(
   cluster=args.cluster,
@@ -61,24 +66,39 @@ tasks_response = ecsClient.describe_tasks(
 )
 
 if args.verbose:
+  print('---')
   print('tasks:', tasks_response)
+  print('---')
 
-container_id = None
 containers = tasks_response['tasks'][0]['containers']
 
+if args.verbose:
+  print('---')
+  print('containers:', containers)
+  print('---')
+
+container_id = None
 # Loop through containers to find one with the same name as the service
 # (There is sometimes a `ecs-service-connect` container so cannot rely on there being 1 container, or 1st container)
 for container in containers:
   if container['name'] == args.service:
     container_id = container['runtimeId']
+container_id = containers[0]['runtimeId']
 
 if container_id is None:
   raise Exception(f"Cannot find a container runtimeId for %s" % args.service)
 
 if args.verbose:
+  print('---')
   print('container_id:', container_id)
+  print('---')
 
 target=f"ecs:%s_%s_%s" % (args.cluster, task_id, container_id)
+
+if args.verbose:
+  print('---')
+  print('target:', target)
+  print('---')
 
 ssm_response = ssmClient.start_session(
   Target=target,
